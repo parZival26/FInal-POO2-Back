@@ -20,11 +20,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: { username: string }): Promise<Prisma.UserCreateInput> {
-        const users = await this.prismaService.user.findUnique({
+        const user = await this.prismaService.user.findUnique({
             where: {
                 username: payload.username
             }
         })
-        return users;
+        return user;
     }
 }
