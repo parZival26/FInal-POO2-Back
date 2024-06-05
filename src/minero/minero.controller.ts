@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, ParseIntPipe, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, ParseIntPipe, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { MineroService } from './minero.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Request, Response } from 'express';
@@ -19,5 +19,20 @@ export class MineroController {
         await this.mineroService.registrarSalida(cedula, userId);
         res.status(HttpStatus.OK).json({ message: 'Salida registrada correctamente' });
 
+    }
+
+    @Get('salidas')
+    @UseGuards(JwtAuthGuard)
+    async obtenerSalidas(
+        @Res() res: Response
+    ): Promise<void> {
+        const salidas = await this.mineroService.obtenerSalidas();
+        const salidasTransformadas = salidas.map(salida => {
+            return {
+                ...salida,
+                cedula: Number(salida.cedula)
+            };
+        });
+        res.status(HttpStatus.OK).json(salidasTransformadas);
     }
 }

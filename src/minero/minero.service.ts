@@ -20,4 +20,8 @@ export class MineroService {
             }
         });
     }
+
+    async obtenerSalidas(): Promise<RegistroSalida[]> {
+        return this.prismaService.registroSalida.findMany();
+    }
 }
